@@ -37,6 +37,8 @@ public class TeacherRepoTest {
 	public void saveTeacherTest()
 	{
 		Teacher teacher = Teacher.builder()
+				.id(2L)
+				.teacherId("SMT002")
 				.userName("ram123")
 				.password("ram@pass")
 				.name("Ramesh")

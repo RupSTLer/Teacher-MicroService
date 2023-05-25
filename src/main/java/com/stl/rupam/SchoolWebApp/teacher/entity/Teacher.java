@@ -35,17 +35,21 @@ public class Teacher {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotEmpty(message = "username not valid")
+	private String teacherId;
+	
+	@NotEmpty(message = "username is mandetory")
+	@Pattern(regexp = "[a-zA-Z0-9]{4,}", message = "please give valid userName")
 	private String userName;
 	
-	@NotEmpty(message = "password not valid")
+	@NotEmpty(message = "password is mandetory")
+	@Pattern(regexp = "(?=.*[a-z])(?=.*[A-Z]).{5,}", message = "please give valid password")
 	private String password;
 	
-	@NotEmpty(message = "name not valid")
+	@NotEmpty(message = "name is mandetory")
+	@Pattern(regexp = "[a-zA-Z]{2}[a-zA-Z ]+", message = "please give valid name")
 	private String name;
 	
-	@Email(message = "email not valid")
-//	@Pattern(regexp = "^([a-zA-Z0-9_\\\\-\\\\.]+)@([a-zA-Z0-9_\\\\-\\\\.]+)\\\\.([a-zA-Z]{2,5})$")
+	@Email(message = "please give valid email")
 	private String email;
 	
 	
