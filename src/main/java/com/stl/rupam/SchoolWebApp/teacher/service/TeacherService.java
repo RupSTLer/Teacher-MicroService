@@ -21,17 +21,9 @@ public class TeacherService {
 	@Autowired
 	private UserRepo userRepo;
 
-//	@Autowired
-//	private PasswordEncoder passwordEncoder;
-
-//	public Teacher saveTeacher(Teacher teacher)
-//	{
-//		return teacherRepo.save(teacher);	
-//	}
-
 	public Teacher saveTeacher(Teacher teacher) {
 		Long c = teacherRepo.count();
-		String u = "SMT00" + c;
+		String u = "SMT00" + (c+1);
 		teacher.setTeacherId(u);
 
 		// checking duplicate entries via email
@@ -41,9 +33,9 @@ public class TeacherService {
 
 		} catch (Exception ex) {
 //			ex.printStackTrace();
+			
 			Teacher t = teacherRepo.save(teacher);
-//			System.out.println(t.getUserName() + " " + t.getPassword());
-			userRepo.save(new User(t.getUserName(), t.getPassword()));
+			userRepo.save(new User(t.getUserName(), t.getPassword(), t.getTeacherId(), t.getName(), t.getAge(), t.getBirthDate(), t.getGender(), t.getAddress(), t.getPhoneNo(), t.getEmail(), t.getDepartment()));
 			
 			teacherRepo.setRole(t.getUserName(), "Teacher");
 			return t;
@@ -57,40 +49,25 @@ public class TeacherService {
 		return teacherRepo.findAll();
 	}
 
-	public Teacher getTeacherByID(Long id) {
-		return teacherRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Teacher not exist with id: " + id));
+	public Teacher getTeacherByTeacherId(String teacherId) {
+		return teacherRepo.getTeacherByTeacherId(teacherId)
+				.orElseThrow(() -> new ResourceNotFoundException("Teacher not exist with teacherId: " + teacherId));
 	}
 
-	public Teacher updateTeacher(Teacher teacher, Long id) {
-		Teacher existingTeacher = teacherRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Teacher not exist with id: " + id));
-
-//		existingTeacher.setId(teacher.getId());
-//		existingTeacher.setUserName(teacher.getUserName());
-//		existingTeacher.setName(teacher.getName());
-//		existingTeacher.setPassword(teacher.getPassword());
-//		existingTeacher.setPassword(getEncodedPassword(teacher.getPassword()));
-//		existingTeacher.setEmail(teacher.getEmail());
-
-//		teacherRepo.save(existingTeacher);
-//		return existingTeacher;
+	public Teacher updateTeacher(String teacherId, Teacher teacher) {
+		Teacher existingTeacher = teacherRepo.getTeacherByTeacherId(teacherId)
+				.orElseThrow(() -> new ResourceNotFoundException("Teacher not exist with teacherId: " + teacherId));
 
 		return teacherRepo.saveAndFlush(teacher);
 	}
 
-	public void deleteTeacher(Long id) {
-		teacherRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Teacher not exist with id: " + id));
-		teacherRepo.deleteById(id);
+	public void deleteTeacher(String teacherId) {
+		teacherRepo.getTeacherByTeacherId(teacherId).orElseThrow(() -> new ResourceNotFoundException("Teacher not exist with teacherId: " + teacherId));
+		teacherRepo.deleteById(teacherId);
 	}
 
 	public Long countTeacher() {
 		return teacherRepo.count();
 	}
-
-//	public String getEncodedPassword(String password) {
-//		return passwordEncoder.encode(password);
-//	}
-//	
 
 }

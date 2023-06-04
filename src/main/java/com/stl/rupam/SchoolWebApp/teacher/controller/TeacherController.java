@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
-//import com.stl.rupam.SchoolWebApp.teacher.entity.Student;
 import com.stl.rupam.SchoolWebApp.teacher.entity.Teacher;
 import com.stl.rupam.SchoolWebApp.teacher.service.TeacherService;
 
@@ -35,22 +33,10 @@ public class TeacherController {
 	@Autowired
 	private TeacherService teacherService;
 	
-//	@Autowired
-//	private RestTemplate rest;
-	
-//	@Autowired
-//	private MessageRepo msgRepo;
-	
 	@GetMapping("/")
 	public String teacher_controller()
 	{
 		return "This is teacher controller";
-	}
-	
-	@GetMapping("/listTeachers")
-	public List<Teacher> listAllTeachers()
-	{
-		return teacherService.listAllTeachers();
 	}
 	
 	@PostMapping("/addTeacher")
@@ -59,23 +45,28 @@ public class TeacherController {
 		return new ResponseEntity<Teacher>(teacherService.saveTeacher(teacher), HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<Teacher> getTeacherByID(@PathVariable("id") Long id)
+	@PutMapping("/{teacherId}")
+	public ResponseEntity<Teacher> updateTeacher(@Valid @PathVariable String teacherId, @RequestBody Teacher teacher)
 	{
-		return new ResponseEntity<Teacher>(teacherService.getTeacherByID(id), HttpStatus.OK);
+		return new ResponseEntity<Teacher>(teacherService.updateTeacher(teacherId, teacher), HttpStatus.OK);
 	}
 	
-	@PutMapping("/{id}")
-	public ResponseEntity<Teacher> updateTeacher(@Valid @RequestBody Teacher teacher, @PathVariable("id") Long id)
+	@GetMapping("/{teacherId}")
+	public ResponseEntity<Teacher> getTeacherByTeacherID(@PathVariable String teacherId)
 	{
-		return new ResponseEntity<Teacher>(teacherService.updateTeacher(teacher, id), HttpStatus.OK);
+		return new ResponseEntity<Teacher>(teacherService.getTeacherByTeacherId(teacherId), HttpStatus.OK);
 	}
 	
-
-	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteTeacher(@PathVariable("id") Long id)
+	@GetMapping("/listTeachers")
+	public List<Teacher> listAllTeachers()
 	{
-		teacherService.deleteTeacher(id);
+		return teacherService.listAllTeachers();
+	}
+	
+	@DeleteMapping("/{teacherId}")
+	public ResponseEntity<String> deleteTeacher(@PathVariable String teacherId)
+	{
+		teacherService.deleteTeacher(teacherId);
 		return new ResponseEntity<String>("Teacher deleted successfully", HttpStatus.OK);
 	}
 	
@@ -85,26 +76,20 @@ public class TeacherController {
 		return new ResponseEntity<Long>(n1, HttpStatus.OK);
 	}
 	
-	//call the student microservice to get the student assigned to this teacher
-//	@GetMapping("/{id}")
-//	public ResponseEntity<Teacher> getTeacher(@PathVariable String id)
-//	{
-//		Student student = rest.getForObject("http://locahost:9003/student?id=" + id, Student.class);
-//		
-//		Teacher teacher = new Teacher(id, student);
-//		
-//		return ResponseEntity.ok(teacher);
-//	}
-//	
-	
-//	@GetMapping("/getMessage")
-//	public List<MessageToTeacher> getMessage()
-//	{
-//		return msgRepo.findAll();
-//	}
-//	
-	
-	
-
 
 }
+
+
+
+//call the student microservice to get the student assigned to this teacher
+//@GetMapping("/{id}")
+//public ResponseEntity<Teacher> getTeacher(@PathVariable String id)
+//{
+//	Student student = rest.getForObject("http://locahost:9003/student?id=" + id, Student.class);
+//	
+//	Teacher teacher = new Teacher(id, student);
+//	
+//	return ResponseEntity.ok(teacher);
+//}
+//
+

@@ -10,10 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.stl.rupam.SchoolWebApp.teacher.entity.Teacher;
 
 
-public interface TeacherRepo extends JpaRepository<Teacher, Long> {
+public interface TeacherRepo extends JpaRepository<Teacher, String> {
 	
 //	@Query(value = "select * from teachers where email=?", nativeQuery = true)
 	Optional<Teacher> findByEmail(String email);
+	
+	Optional<Teacher> findByPhoneNo(String phoneNo);
+	
+	Optional<Teacher> getTeacherByTeacherId(String teacherId);
 	
 	@Transactional
 	@Modifying
