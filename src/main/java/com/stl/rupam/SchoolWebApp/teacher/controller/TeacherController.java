@@ -33,22 +33,22 @@ public class TeacherController {
 	@Autowired
 	private TeacherService teacherService;
 	
-	@GetMapping("/")
+	@GetMapping("/teacherApp")
 	public String teacher_controller()
 	{
-		return "This is teacher controller";
+		return "This is Teacher service application";
 	}
 	
 	@PostMapping("/addTeacher")
-	public ResponseEntity<Teacher> saveTeacher(@Valid @RequestBody Teacher teacher)
+	public ResponseEntity<String> saveTeacher(@Valid @RequestBody Teacher teacher)
 	{
-		return new ResponseEntity<Teacher>(teacherService.saveTeacher(teacher), HttpStatus.CREATED);
+		return new ResponseEntity<String>(teacherService.saveTeacher(teacher), HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{teacherId}")
-	public ResponseEntity<Teacher> updateTeacher(@Valid @PathVariable String teacherId, @RequestBody Teacher teacher)
+	public ResponseEntity<String> updateTeacher(@Valid @PathVariable String teacherId, @RequestBody Teacher teacher)
 	{
-		return new ResponseEntity<Teacher>(teacherService.updateTeacher(teacherId, teacher), HttpStatus.OK);
+		return new ResponseEntity<String>(teacherService.updateTeacher(teacherId, teacher), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{teacherId}")

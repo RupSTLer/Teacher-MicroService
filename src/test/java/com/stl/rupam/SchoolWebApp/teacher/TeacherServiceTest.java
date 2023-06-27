@@ -5,6 +5,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
 import com.stl.rupam.SchoolWebApp.teacher.entity.Teacher;
+import com.stl.rupam.SchoolWebApp.teacher.entity.User;
 import com.stl.rupam.SchoolWebApp.teacher.repo.TeacherRepo;
 import com.stl.rupam.SchoolWebApp.teacher.repo.UserRepo;
 import com.stl.rupam.SchoolWebApp.teacher.service.TeacherService;
@@ -43,10 +45,10 @@ public class TeacherServiceTest {
 	@Rollback(value = false)
 	public void saveTeacherTest()
 	{
-		Teacher mockTeacher = new Teacher("SMT001", "ram123", "Ram@pass", "Ramesh", "rami@gmail.com");
+		Teacher mockTeacher = new Teacher("SMT001", "ram123", "Ram@pass", "Ramesh", LocalDate.of(1992, 3, 24), "rami@gmail.com");
 		
 		when(teacherRepo.save(mockTeacher)).thenReturn(mockTeacher);
-		assertEquals(mockTeacher, teacherService.saveTeacher(mockTeacher));
+		assertEquals("Teacher added successfully", teacherService.saveTeacher(mockTeacher));
 		verify(teacherRepo, times(1)).save(mockTeacher);
 	}
 	
@@ -93,17 +95,17 @@ public class TeacherServiceTest {
 	public void updateTeacherTest()
 	{
 		String teacherId = "SMT001";
-		Teacher existingTeacher = new Teacher(teacherId, "ram123", "Ram@pass", "Ramesh", "ram@gmail.com");
-		Teacher updatedTeacher = new Teacher(teacherId, "ram123", "Ram@pass", "Ramesh", "ramesh@gmail.com");
+		Teacher existingTeacher = new Teacher(teacherId, "ram123", "Ram@pass", "Ramesh", LocalDate.of(1992, 3, 24), "ram@gmail.com");
+		Teacher updatedTeacher = new Teacher(teacherId, "ram123", "Ram@pass", "Ramesh", LocalDate.of(1992, 3, 24), "ramesh@gmail.com");
 
 		when(teacherRepo.getTeacherByTeacherId(teacherId)).thenReturn(Optional.of(existingTeacher));
-		when(teacherRepo.saveAndFlush(existingTeacher)).thenReturn(updatedTeacher);
+		when(teacherRepo.save(existingTeacher)).thenReturn(updatedTeacher);
 
-		Teacher mockService = teacherService.updateTeacher(teacherId, existingTeacher);
+		String mockService = teacherService.updateTeacher(teacherId, existingTeacher);
 
-		assertEquals(updatedTeacher, mockService);
+		assertEquals("Teacher details updated successfully", mockService);
 		verify(teacherRepo, times(1)).getTeacherByTeacherId(teacherId);
-		verify(teacherRepo, times(1)).saveAndFlush(existingTeacher);
+		verify(teacherRepo, times(1)).save(existingTeacher);
 
 	}
 	
@@ -130,16 +132,22 @@ public class TeacherServiceTest {
 	@Rollback(value = false)
 	public void deleteTeacherTest()
 	{
-		String teacherId = "SMT001";
+		String teacherId = "SMT002";
 		
-		Teacher teacher = new Teacher(teacherId, "ram123", "Ram@pass", "Ramesh", "ram@gmail.com");
+		Teacher teacher = new Teacher(teacherId, "ram123", "Ram@pass", "Ramesh", LocalDate.of(1992, 3, 24), "ram@gmail.com");
+		User user = new User("ram123", "Ram@pass", teacherId, "Ramesh", LocalDate.of(1992, 3, 24), "ram@gmail.com");
 		
 		when(teacherRepo.getTeacherByTeacherId(teacherId)).thenReturn(Optional.of(teacher));  //mocking
+		when(userRepo.getTeacherByUserID(teacherId)).thenReturn(Optional.of(user));  //mocking
 		
 		teacherService.deleteTeacher(teacherId);
 		
 		verify(teacherRepo,times(1)).getTeacherByTeacherId(teacherId);
 		verify(teacherRepo,times(1)).deleteById(teacherId);;
+		verify(userRepo,times(1)).getTeacherByUserID(teacherId);
+		verify(teacherRepo,times(1)).deleteRole(teacher.getUserName());
+		verify(userRepo,times(1)).deleteUser(teacherId);
+		
 	}
 
 }

@@ -19,8 +19,6 @@ import lombok.Data;
 @Entity
 @Data
 public class User {
-//	private Long id;
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
 	@Id
 	@NotEmpty(message = "username is mandetory")
@@ -40,8 +38,8 @@ public class User {
 	
 	@NotNull(message = "please add valid age")
 	@Positive(message = "age should be positive")
-	@Min(value = 6, message = "age must be atleast 6")
-	@Max(value = 18, message = "age must be less than 18")
+//	@Min(value = 6, message = "age must be atleast 6")
+//	@Max(value = 18, message = "age must be less than 18")
 	private int age;
 
 //	@NotNull(message = "DOB is mandetory")
@@ -100,6 +98,26 @@ public class User {
 		this.email = email;
 		this.department = department;
 	}
+
+
+
+	public User(@NotEmpty(message = "username is mandetory") @Pattern(regexp = "[a-zA-Z0-9]{4,}") String userName,
+			@NotEmpty(message = "password is mandetory") @Pattern(regexp = "(?=.*[a-z])(?=.*[A-Z]).{5,}") String userPassword,
+			@NotEmpty(message = "userID is mandetory") String userID,
+			@NotEmpty(message = "name is mandetory") @Pattern(regexp = "[a-zA-Z]{2}[a-zA-Z ]+", message = "please add valid name") String name,
+			LocalDate birthDate,
+			@NotEmpty(message = "email is mandetory") @Email(message = "please give valid email") String email) {
+		super();
+		this.userName = userName;
+		this.userPassword = userPassword;
+		this.userID = userID;
+		this.name = name;
+		this.birthDate = birthDate;
+		this.email = email;
+	}
+	
+	
+	
 
 	
 

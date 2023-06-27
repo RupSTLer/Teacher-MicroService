@@ -1,17 +1,9 @@
 package com.stl.rupam.SchoolWebApp.teacher.entity;
 
 import java.time.LocalDate;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
@@ -36,10 +28,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Teacher {
 	
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Long id;
-	
 	@Id
 	private String teacherId;
 	
@@ -57,8 +45,8 @@ public class Teacher {
 	
 	@NotNull(message = "please add valid age")
 	@Positive(message = "age should be positive")
-	@Min(value = 6, message = "age must be atleast 6")
-	@Max(value = 18, message = "age must be less than 18")
+//	@Min(value = 6, message = "age must be atleast 6")
+//	@Max(value = 18, message = "age must be less than 18")
 	private int age;
 
 //	@NotNull(message = "DOB is mandetory")
@@ -99,12 +87,23 @@ public class Teacher {
 		this.email = email;
 	}
 
-	
-	
-	
+
+	public Teacher(String teacherId,
+			@NotEmpty(message = "username is mandetory") @Pattern(regexp = "[a-zA-Z0-9]{4,}", message = "please give valid userName") String userName,
+			@NotEmpty(message = "password is mandetory") @Pattern(regexp = "(?=.*[a-z])(?=.*[A-Z]).{5,}", message = "please give valid password") String password,
+			@NotEmpty(message = "name is mandetory") @Pattern(regexp = "[a-zA-Z]{2}[a-zA-Z ]+", message = "please give valid name") String name,
+			LocalDate birthDate,
+			@NotEmpty(message = "email is mandetory") @Email(message = "please give valid email") String email) {
+		
+		super();
+		this.teacherId = teacherId;
+		this.userName = userName;
+		this.password = password;
+		this.name = name;
+		this.birthDate = birthDate;
+		this.email = email;
+	}
 
 	
-	
-
 }
 
