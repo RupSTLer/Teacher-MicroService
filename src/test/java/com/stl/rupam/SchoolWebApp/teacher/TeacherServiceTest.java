@@ -45,7 +45,7 @@ public class TeacherServiceTest {
 	@Rollback(value = false)
 	public void saveTeacherTest()
 	{
-		Teacher mockTeacher = new Teacher("SMT001", "ram123", "Ram@pass", "Ramesh", LocalDate.of(1992, 3, 24), "rami@gmail.com");
+		Teacher mockTeacher = new Teacher("SMT001", "ram123", "Ram@pass", "Ramesh", LocalDate.of(2000, 3, 24), "rami@gmail.com");
 		
 		when(teacherRepo.save(mockTeacher)).thenReturn(mockTeacher);
 		assertEquals("Teacher added successfully", teacherService.saveTeacher(mockTeacher));
@@ -95,8 +95,8 @@ public class TeacherServiceTest {
 	public void updateTeacherTest()
 	{
 		String teacherId = "SMT001";
-		Teacher existingTeacher = new Teacher(teacherId, "ram123", "Ram@pass", "Ramesh", LocalDate.of(1992, 3, 24), "ram@gmail.com");
-		Teacher updatedTeacher = new Teacher(teacherId, "ram123", "Ram@pass", "Ramesh", LocalDate.of(1992, 3, 24), "ramesh@gmail.com");
+		Teacher existingTeacher = new Teacher(teacherId, "ram123", "Ram@pass", "Ramesh", LocalDate.of(2000, 3, 24), "ram@gmail.com");
+		Teacher updatedTeacher = new Teacher(teacherId, "ram123", "Ram@pass", "Ramesh", LocalDate.of(2000, 3, 24), "ramesh@gmail.com");
 
 		when(teacherRepo.getTeacherByTeacherId(teacherId)).thenReturn(Optional.of(existingTeacher));
 		when(teacherRepo.save(existingTeacher)).thenReturn(updatedTeacher);
@@ -134,8 +134,8 @@ public class TeacherServiceTest {
 	{
 		String teacherId = "SMT002";
 		
-		Teacher teacher = new Teacher(teacherId, "ram123", "Ram@pass", "Ramesh", LocalDate.of(1992, 3, 24), "ram@gmail.com");
-		User user = new User("ram123", "Ram@pass", teacherId, "Ramesh", LocalDate.of(1992, 3, 24), "ram@gmail.com");
+		Teacher teacher = new Teacher(teacherId, "ram123", "Ram@pass", "Ramesh", LocalDate.of(2000, 3, 24), "ram@gmail.com");
+		User user = new User("ram123", "Ram@pass", teacherId, "Ramesh", LocalDate.of(2000, 3, 24), "ram@gmail.com");
 		
 		when(teacherRepo.getTeacherByTeacherId(teacherId)).thenReturn(Optional.of(teacher));  //mocking
 		when(userRepo.getTeacherByUserID(teacherId)).thenReturn(Optional.of(user));  //mocking

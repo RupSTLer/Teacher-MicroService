@@ -45,8 +45,8 @@ public class Teacher {
 	
 	@NotNull(message = "please add valid age")
 	@Positive(message = "age should be positive")
-//	@Min(value = 6, message = "age must be atleast 6")
-//	@Max(value = 18, message = "age must be less than 18")
+	@Min(value = 30, message = "age must be atleast 30")
+	@Max(value = 50, message = "age must be less than 50")
 	private int age;
 
 //	@NotNull(message = "DOB is mandetory")

@@ -31,6 +31,7 @@ public class TeacherService {
 
 		if (tea == null) {
 			Teacher t = teacherRepo.save(teacher);
+			
 			userRepo.save(new User(t.getUserName(), t.getPassword(), t.getTeacherId(), t.getName(), t.getAge(),
 					t.getBirthDate(), t.getGender(), t.getAddress(), t.getPhoneNo(), t.getEmail(), t.getDepartment()));
 
@@ -48,14 +49,12 @@ public class TeacherService {
 		Teacher existingTeacher = teacherRepo.getTeacherByTeacherId(teacherId)
 				.orElseThrow(() -> new ResourceNotFoundException("Teacher not exist with teacherId: " + teacherId));
 
-		String tea = validateTeacherUpdate(teacher);
+		String tea = validateUpdateTeacher(teacher);
 
 		if (tea == null) {
 			Teacher t = teacherRepo.save(teacher);
 			userRepo.save(new User(t.getUserName(), t.getPassword(), t.getTeacherId(), t.getName(), t.getAge(),
 					t.getBirthDate(), t.getGender(), t.getAddress(), t.getPhoneNo(), t.getEmail(), t.getDepartment()));
-
-			teacherRepo.setRole(t.getUserName(), "Teacher");
 			
 			return "Teacher details updated successfully";
 		} 
@@ -65,32 +64,36 @@ public class TeacherService {
 	}
 
 	public String validateTeacher(Teacher teacher) {
-		LocalDate minDate = LocalDate.of(1990, 1, 1);
-		LocalDate maxDate = LocalDate.of(2000, 12, 31);
+		LocalDate minDate = LocalDate.of(2000, 1, 1);
+		LocalDate maxDate = LocalDate.of(2020, 12, 31);
 		LocalDate birthDate = teacher.getBirthDate();
 
 		try {
 
 			if (birthDate.isBefore(minDate) || birthDate.isAfter(maxDate)) {
-				throw new IllegalArgumentException("Invalid date. Date must be in between 1990 to 2000");
+				throw new IllegalArgumentException("Invalid Bithdate. Bithdate must be in between 2000 to 2020");
+			}
+			if(teacher.getAge() < 30 && teacher.getAge() > 50)
+			{
+				throw new IllegalArgumentException("Age must be in between 30 to 50");
 			}
 
 			List<Teacher> existingEmail = teacherRepo.findByEmail(teacher.getEmail());
 
 			if (!existingEmail.isEmpty()) {
-				throw new IllegalArgumentException("Email already exists");
+				throw new IllegalArgumentException(teacher.getEmail() + " :Email already exists");
 			}
 
 			List<Teacher> existingUserName = teacherRepo.findByUserName(teacher.getUserName());
 
 			if (!existingUserName.isEmpty()) {
-				throw new IllegalArgumentException("Username already exists");
+				throw new IllegalArgumentException(teacher.getUserName() + " :Username already exists");
 			}
 
 			List<Teacher> existingPhoneNo = teacherRepo.findByPhoneNo(teacher.getPhoneNo());
 
 			if (!existingPhoneNo.isEmpty()) {
-				throw new IllegalArgumentException("PhoneNo already exists");
+				throw new IllegalArgumentException(teacher.getPhoneNo() + " :PhoneNo already exists");
 			}
 
 		} catch (Exception ex) {
@@ -100,34 +103,16 @@ public class TeacherService {
 		return null;
 	}
 	
-	public String validateTeacherUpdate(Teacher teacher) {
-		LocalDate minDate = LocalDate.of(1990, 1, 1);
-		LocalDate maxDate = LocalDate.of(2000, 12, 31);
+	public String validateUpdateTeacher(Teacher teacher) {
+		LocalDate minDate = LocalDate.of(2000, 1, 1);
+		LocalDate maxDate = LocalDate.of(2020, 12, 31);
 		LocalDate birthDate = teacher.getBirthDate();
 
 		try {
 
 			if (birthDate.isBefore(minDate) || birthDate.isAfter(maxDate)) {
-				throw new IllegalArgumentException("Invalid date. Date must be in between 1990 to 2000");
+				throw new IllegalArgumentException("Invalid Bithdate. Bithdate must be in between 2000 to 2020");
 			}
-
-//			List<Teacher> existingEmail = teacherRepo.findByEmail(teacher.getEmail());
-//
-//			if (!existingEmail.isEmpty()) {
-//				throw new IllegalArgumentException("Email already exists");
-//			}
-//
-//			List<Teacher> existingUserName = teacherRepo.findByUserName(teacher.getUserName());
-//
-//			if (!existingUserName.isEmpty()) {
-//				throw new IllegalArgumentException("Username already exists");
-//			}
-//
-//			List<Teacher> existingPhoneNo = teacherRepo.findByPhoneNo(teacher.getPhoneNo());
-//
-//			if (!existingPhoneNo.isEmpty()) {
-//				throw new IllegalArgumentException("PhoneNo already exists");
-//			}
 
 		} catch (Exception ex) {
 			return ex.getMessage();
